@@ -3,8 +3,8 @@ package week4
 import java.math.BigInteger
 
 
-infix fun Int.divBy(toDivideBy: Int): String {
-    return "$this/$toDivideBy"
+infix fun Int.divBy(toDivideBy: Int): Rational {
+    return Rational("$this/$toDivideBy")
 }
 
 
@@ -18,6 +18,38 @@ class Rational(rawData: String) {
             denominator = last().toBigInteger()
         }
     }
+}
+
+operator fun Rational.plus(otherRational: Rational): Rational {
+    return Rational("balls")
+}
+
+operator fun Rational.minus(otherRational: Rational): Rational {
+    return Rational("balls")
+}
+
+operator fun Rational.times(otherRational: Rational): Rational {
+    return Rational("balls")
+}
+
+operator fun Rational.div(otherRational: Rational): Rational {
+    return Rational("balls")
+}
+
+operator fun Rational.unaryMinus(): Rational {
+    return Rational("balls")
+}
+
+operator fun Rational.rangeTo(otherRational: Rational): Int {
+    return 0
+}
+
+operator fun Rational.compareTo(otherRational: Rational): Int {
+    return 0
+}
+
+fun String.toRational(): Rational {
+    return Rational(this)
 }
 
 fun main() {
