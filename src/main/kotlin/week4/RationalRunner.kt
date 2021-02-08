@@ -4,7 +4,7 @@ import java.math.BigInteger
 
 
 infix fun Int.divBy(toDivideBy: Int): Rational {
-    return Rational("$this/$toDivideBy")
+    return Rational(this, toDivideBy)
 }
 
 
@@ -13,11 +13,19 @@ infix fun Long.divBy(toDivideBy: Long): Rational {
 }
 
 
-class Rational(rawData: String) : Comparable<Rational> {
-    var numerator: BigInteger
-    var denominator: BigInteger
+class Rational() : Comparable<Rational> {
 
-    init {
+
+    lateinit var numerator: BigInteger
+    lateinit var denominator: BigInteger
+
+    constructor(numerator: Int, denominator: Int) : this() {
+        this.numerator = numerator.toBigInteger()
+        this.denominator = denominator.toBigInteger()
+
+    }
+
+    constructor(rawData: String) : this() {
         rawData.split("/").apply {
             numerator = first().toBigInteger()
             denominator = last().toBigInteger()
@@ -27,7 +35,6 @@ class Rational(rawData: String) : Comparable<Rational> {
     override fun compareTo(other: Rational): Int {
         TODO("Not yet implemented")
     }
-
 
     override fun equals(other: Any?): Boolean {
         if (!(other is Rational)) {
