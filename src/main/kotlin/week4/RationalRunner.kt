@@ -15,14 +15,17 @@ infix fun Long.divBy(toDivideBy: Long): Rational {
 
 class Rational() : Comparable<Rational> {
 
-
     lateinit var numerator: BigInteger
     lateinit var denominator: BigInteger
 
     constructor(numerator: Int, denominator: Int) : this() {
         this.numerator = numerator.toBigInteger()
         this.denominator = denominator.toBigInteger()
+    }
 
+    constructor(numerator: BigInteger, denominator: BigInteger) : this() {
+        this.numerator = numerator
+        this.denominator = denominator
     }
 
     constructor(rawData: String) : this() {
@@ -49,24 +52,36 @@ class Rational() : Comparable<Rational> {
 }
 
 operator fun Rational.plus(other: Rational): Rational {
+    val lcm = this.getLCM(other)
+    val thisToMultiplyBy = lcm / this.denominator
+    val otherToMultiplyBy = lcm / other.denominator
+
+    val sumOfNumerators = this.numerator * thisToMultiplyBy + other.numerator * otherToMultiplyBy
+
+    return Rational(sumOfNumerators, lcm)
+}
+
+operator fun Rational.minus(other: Rational): Rational {
+
+    val lcm = this.getLCM(other)
+
+    val thisToMultiplyBy = lcm / this.denominator
+    val otherToMultiplyBy = lcm / other.denominator
+
+    val numeratorDifference = this.numerator * thisToMultiplyBy - other.numerator * otherToMultiplyBy
+
+    return Rational(numeratorDifference, lcm)
+}
 
 
+fun Rational.getLCM(other: Rational): BigInteger {
     val absHigherNumber=  this.denominator.max(other.denominator)
     val absLowerNumber = this.denominator.min(other.denominator)
     var lcm = absHigherNumber
     while (lcm.mod(absLowerNumber).toInt() != 0) {
         lcm += absHigherNumber
     }
-    val thisToMultiplyBy = lcm / this.denominator
-    val otherToMultiplyBy = lcm / other.denominator
-
-    val sumOfNumerators = this.numerator * thisToMultiplyBy + other.numerator * otherToMultiplyBy
-
-    return Rational("$sumOfNumerators/$lcm")
-}
-
-operator fun Rational.minus(otherRational: Rational): Rational {
-    return Rational("balls")
+    return lcm
 }
 
 operator fun Rational.times(otherRational: Rational): Rational {
@@ -94,19 +109,14 @@ fun main() {
     val half = 1 divBy 2
     val third = 1 divBy 3
 
-    println(half)
-    println(third)
-
-
     val sum: Rational = half + third
 
-    println(sum)
-    println(5 divBy 6)
     println(5 divBy 6 == sum)
-/*
+
     val difference: Rational = half - third
     println(1 divBy 6 == difference)
 
+/*
     val product: Rational = half * third
     println(1 divBy 6 == product)
 
