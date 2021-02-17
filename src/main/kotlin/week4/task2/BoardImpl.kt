@@ -2,16 +2,18 @@ package board
 
 import board.Direction.*
 
-fun createSquareBoard(width: Int): SquareBoard {
+/*fun createSquareBoard(width: Int): SquareBoard {
 
-}
+}*/
 
 
-class MyGameBoard<T>(width: Int) : GameBoard<T> {
+class MyGameBoard<T>(val gameBoardWidth: Int) : GameBoard<T> {
 
+    @JvmField
+    val cellMap = mutableMapOf<Pair<Int, Int>, T?>()
 
     override val width: Int
-        get() = TODO("Not yet implemented")
+        get() = gameBoardWidth
 
     override fun getCellOrNull(i: Int, j: Int): Cell? {
         TODO("Not yet implemented")
@@ -41,16 +43,15 @@ class MyGameBoard<T>(width: Int) : GameBoard<T> {
         TODO("Not yet implemented")
     }
 
-    override fun get(row: Int, column: Int): T? {
-        TODO("Not yet implemented")
-    }
+    override fun get(row: Int, column: Int): T? =
+         cellMap[Pair(row, column)]
 
     override fun set(cell: Cell, value: T?) {
         TODO("Not yet implemented")
     }
 
     override fun set(row: Int, column: Int, value: T?) {
-        TODO("Not yet implemented")
+        cellMap[Pair(row, column)] = value
     }
 
     override fun filter(predicate: (T?) -> Boolean): Collection<Cell> {
@@ -74,6 +75,6 @@ class MyGameBoard<T>(width: Int) : GameBoard<T> {
 
 fun <T> createGameBoard(width: Int): GameBoard<T>  {
 
-    return MyGameBoard()
+    return MyGameBoard(2)
 }
 
