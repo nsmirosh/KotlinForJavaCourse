@@ -7,13 +7,23 @@ import board.Direction.*
 }*/
 
 
-class MyGameBoard<T>(val gameBoardWidth: Int) : GameBoard<T> {
+class MyGameBoard<T>(override val width: Int) : GameBoard<T> {
 
     @JvmField
-    val cellMap = mutableMapOf<Pair<Int, Int>, T?>()
+    val cellMap = mutableMapOf<Cell, T?>()
 
-    override val width: Int
-        get() = gameBoardWidth
+    init {
+        var row = 1
+        var column = 1
+        repeat (width) {
+            repeat(width) {
+                cellMap.put(Cell(row, column), null)
+                column++
+            }
+            column = 1
+            row++
+        }
+    }
 
     override fun getCellOrNull(i: Int, j: Int): Cell? {
         TODO("Not yet implemented")
@@ -44,18 +54,18 @@ class MyGameBoard<T>(val gameBoardWidth: Int) : GameBoard<T> {
     }
 
     override fun get(row: Int, column: Int): T? =
-         cellMap[Pair(row, column)]
+         cellMap[Cell(row, column)]
 
     override fun set(cell: Cell, value: T?) {
         TODO("Not yet implemented")
     }
 
     override fun set(row: Int, column: Int, value: T?) {
-        cellMap[Pair(row, column)] = value
+        cellMap[Cell(row, column)] = value
     }
 
     override fun filter(predicate: (T?) -> Boolean): Collection<Cell> {
-        TODO("Not yet implemented")
+        return cellMap.filterValues(predicate).keys
     }
 
     override fun find(predicate: (T?) -> Boolean): Cell? {
@@ -67,7 +77,7 @@ class MyGameBoard<T>(val gameBoardWidth: Int) : GameBoard<T> {
     }
 
     override fun all(predicate: (T?) -> Boolean): Boolean {
-        TODO("Not yet implemented")
+        return cellMap.values.all(predicate)
     }
 }
 

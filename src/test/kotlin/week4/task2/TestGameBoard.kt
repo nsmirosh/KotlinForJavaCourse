@@ -40,6 +40,4 @@ class TestGameBoard {
         gameBoard[2, 2] = 'a'
         Assert.assertTrue(gameBoard.all { it == 'a' })
     }
-
-
 }
