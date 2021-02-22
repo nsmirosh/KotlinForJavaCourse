@@ -2,7 +2,7 @@ package board
 
 import board.Direction.*
 
-class MyGameBoard<T>(override val width: Int) : GameBoard<T> {
+class MyGameBoard<T>(override val width: Int) : MySquareBoard(width), GameBoard<T> {
 
     @JvmField
     val cellMap = mutableMapOf<Cell, T?>()
@@ -20,43 +20,16 @@ class MyGameBoard<T>(override val width: Int) : GameBoard<T> {
         }
     }
 
-    override fun getCellOrNull(i: Int, j: Int): Cell? {
-        TODO("Not yet implemented")
-    }
-
     override fun getCell(i: Int, j: Int): Cell {
        return cellMap.filterKeys { it == Cell(i, j) }.keys.first()
     }
 
-    override fun getAllCells(): Collection<Cell> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getRow(i: Int, jRange: IntProgression): List<Cell> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getColumn(iRange: IntProgression, j: Int): List<Cell> {
-        TODO("Not yet implemented")
-    }
-
-    override fun Cell.getNeighbour(direction: Direction): Cell? {
-        TODO("Not yet implemented")
-    }
-
     override fun get(cell: Cell): T? {
-        TODO("Not yet implemented")
+        return cellMap[cell]
     }
-
-    override fun get(row: Int, column: Int): T? =
-         cellMap[Cell(row, column)]
 
     override fun set(cell: Cell, value: T?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun set(row: Int, column: Int, value: T?) {
-        cellMap[Cell(row, column)] = value
+        cellMap[cell] = value
     }
 
     override fun filter(predicate: (T?) -> Boolean): Collection<Cell> {
@@ -76,7 +49,7 @@ class MyGameBoard<T>(override val width: Int) : GameBoard<T> {
     }
 }
 
-class MySquareBoard(override val width: Int) : SquareBoard {
+open class MySquareBoard(override val width: Int) : SquareBoard {
 
     @JvmField
     val cellSet = mutableSetOf<Cell>()
@@ -99,7 +72,7 @@ class MySquareBoard(override val width: Int) : SquareBoard {
     }
 
     override fun getCell(i: Int, j: Int): Cell {
-        TODO("Not yet implemented")
+        return cellSet.find { it == Cell(i, j)}!!
     }
 
     override fun getAllCells(): Collection<Cell> {
@@ -117,26 +90,30 @@ class MySquareBoard(override val width: Int) : SquareBoard {
     }
 
     override fun getColumn(iRange: IntProgression, j: Int): List<Cell> {
-        TODO("Not yet implemented")
+        val filtered =  cellSet.filter {it.j == j && it.i in iRange}
+
+
+        if (iRange.first < iRange.last) {
+            return filtered
+        }
+        return filtered.sortedByDescending { it.i }
     }
 
     override fun Cell.getNeighbour(direction: Direction): Cell? {
-        TODO("Not yet implemented")
+        return when (direction) {
+            UP -> getCellOrNull(i - 1, j)
+            DOWN -> getCellOrNull(i + 1, j)
+            LEFT -> getCellOrNull(i, j - 1)
+            RIGHT -> getCellOrNull(i, j + 1)
+        }
     }
 }
 
-
-
-
 fun <T> createGameBoard(width: Int): GameBoard<T>  {
-
-    return MyGameBoard(2)
+    return MyGameBoard(width)
 }
 
-
-
 fun createSquareBoard(width: Int): SquareBoard {
-
-    return MySquareBoard(2)
+    return MySquareBoard(width)
 }
 

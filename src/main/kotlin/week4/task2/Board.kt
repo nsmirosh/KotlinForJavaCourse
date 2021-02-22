@@ -32,9 +32,7 @@ interface SquareBoard {
 interface GameBoard<T> : SquareBoard {
 
     operator fun get(cell: Cell): T?
-    operator fun get(row: Int, column: Int): T?
     operator fun set(cell: Cell, value: T?)
-    operator fun set(row: Int, column: Int, value: T?)
 
     fun filter(predicate: (T?) -> Boolean): Collection<Cell>
     fun find(predicate: (T?) -> Boolean): Cell?

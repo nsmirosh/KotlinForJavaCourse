@@ -10,6 +10,10 @@ import org.junit.runners.JUnit4
 
 class TestGameBoard {
 
+    operator fun <T> GameBoard<T>.get(i: Int, j: Int) = get(getCell(i, j))
+    operator fun <T> GameBoard<T>.set(i: Int, j: Int, value: T) = set(getCell(i, j), value)
+
+
     @Test
     fun settingCharacterWorks() {
 
